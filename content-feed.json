@@ -1,0 +1,42 @@
+[
+  {
+    "creator": "Daily Wire",
+    "feed_type": "blog",
+    "id": "https://www.dailywire.com/feeds/rss.xml"
+  },
+  {
+    "creator": "Chris Koerner on The Koerner Office Podcast",
+    "feed_type": "yt",
+    "id": "UCn4dfcINwD3_z41IDFPsFcA"
+  },
+  {
+    "creator": "Marcus House",
+    "feed_type": "yt",
+    "id": "UCBNHHEoiSF8pcLgqLKVugOw"
+  },
+  {
+    "creator": "The Primagen",
+    "feed_type": "yt",
+    "id": "UC8ENHE5xdFSwx71u3fDH5Xw"
+  },
+  {
+    "creator": "The Prime Time",
+    "feed_type": "yt",
+    "id": "UCUyeluBRhGPCW4rPe_UvBZQ"
+  },
+  {
+    "creator": "Daniel Miessler - Unsupervised Learning",
+    "feed_type": "yt",
+    "id": "UCnCikd0s4i9KoDtaHPlK-JA"
+  },
+  {
+    "creator": "Daniel Miessler Blog",
+    "feed_type": "rss",
+    "id": "https://danielmiessler.com/feed.rss"
+  },
+  {
+    "creator": "Morning Wire",
+    "feed_type": "yt",
+    "id": "UCxUQLGMbb2cI8CqiwZ0WhAQ"
+  }
+]
