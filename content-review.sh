@@ -14,8 +14,35 @@ RUN_DATE="${RUN_DATE:-$(date +%F)}"
 OUTPUT_DIR="$GENERATED_DIR/$RUN_DATE"
 RESET_DATE=""
 
+print_help() {
+  cat <<'EOF'
+Usage:
+  ./content-review.sh
+  ./content-review.sh --reset-today
+  ./content-review.sh --reset-date YYYY-MM-DD
+
+Options:
+  --reset-today         Delete today's generated folder and repull it
+  --reset-date DATE     Delete a specific date folder and repull it
+  --help                Show this help text
+
+Environment overrides:
+  FEED_FILE
+  VAULT_DIR
+  GENERATED_DIR
+  STATE_FILE
+  FABRIC_PATTERN
+  MAX_ITEMS_PER_FEED
+  RUN_DATE
+EOF
+}
+
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --help|-h)
+      print_help
+      exit 0
+      ;;
     --reset-today)
       RESET_DATE="$RUN_DATE"
       shift
