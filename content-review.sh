@@ -4,6 +4,13 @@ set -euo pipefail
 IFS=$'\n\t'
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_FILE="${CONFIG_FILE:-$SCRIPT_DIR/content-review.conf}"
+
+if [[ -f "$CONFIG_FILE" ]]; then
+  # shellcheck disable=SC1090
+  source "$CONFIG_FILE"
+fi
+
 FEED_FILE="${FEED_FILE:-$SCRIPT_DIR/content-feed.json}"
 VAULT_DIR="${VAULT_DIR:-$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/personal-vault}"
 GENERATED_DIR="${GENERATED_DIR:-$VAULT_DIR/Generated}"

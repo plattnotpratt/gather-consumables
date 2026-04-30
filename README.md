@@ -12,6 +12,7 @@ Pull content from YouTube and RSS feeds, score it with Fabric, and save the resu
 ## Requirements
 
 - macOS
+- Obsidian with a vault already created
 - `jq`
 - `python3`
 - `fabric`
@@ -45,8 +46,22 @@ chmod +x *.sh
 That will:
 
 - copy the scripts into `~/Library/Application Support/content-review/`
+- prompt for your Obsidian vault absolute path
+- save that vault path into `~/Library/Application Support/content-review/content-review.conf`
 - create a `launchd` job
 - start the job
+
+Example vault path:
+
+```text
+/Users/your-name/Library/Mobile Documents/iCloud~md~obsidian/Documents/personal-vault
+```
+
+You can also skip the prompt by passing `VAULT_DIR`:
+
+```bash
+VAULT_DIR="/absolute/path/to/your/vault" ./install.sh
+```
 
 ## Commands
 
@@ -182,5 +197,6 @@ tail -f "$HOME/Library/Application Support/content-review/content-review.log"
 ## Notes
 
 - `content-review.sh` uses the `label_and_rate` Fabric pattern by default.
-- The default vault path is `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/personal-vault`.
+- The installed vault path is stored in `~/Library/Application Support/content-review/content-review.conf`.
 - If you change the local `content-feed.json`, run `./install.sh` again to copy it into the installed location.
+- If you want to change the vault path later, run `./install.sh` again.

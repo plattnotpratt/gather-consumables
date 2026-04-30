@@ -9,6 +9,8 @@ LAUNCH_AGENTS_DIR="$HOME/Library/LaunchAgents"
 LAUNCH_AGENT_PATH="$LAUNCH_AGENTS_DIR/com.gatherconsumables.content-review.plist"
 LABEL="com.gatherconsumables.content-review"
 LEGACY_LAUNCH_AGENT_PATH="$LAUNCH_AGENTS_DIR/com.chris.content-review.plist"
+DEFAULT_VAULT_DIR="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/personal-vault"
+VAULT_DIR_INPUT="${VAULT_DIR:-}"
 
 print_help() {
   cat <<EOF
@@ -19,6 +21,7 @@ What it installs:
   - $APP_DIR/content-review.sh
   - $APP_DIR/add-feed.sh
   - $APP_DIR/content-feed.json
+  - $APP_DIR/content-review.conf
   - $APP_DIR/.content-review-state.txt
   - $APP_DIR/content-review.log
   - $LAUNCH_AGENT_PATH
@@ -40,6 +43,31 @@ copy_file() {
   cp "$source_path" "$target_path"
 }
 
+prompt_for_vault_dir() {
+  if [[ -n "$VAULT_DIR_INPUT" ]]; then
+    return 0
+  fi
+
+  if [[ -t 0 ]]; then
+    printf 'Obsidian vault absolute path [%s]: ' "$DEFAULT_VAULT_DIR"
+    read -r VAULT_DIR_INPUT
+  fi
+
+  VAULT_DIR_INPUT="${VAULT_DIR_INPUT:-$DEFAULT_VAULT_DIR}"
+}
+
+validate_vault_dir() {
+  if [[ "$VAULT_DIR_INPUT" != /* ]]; then
+    printf 'Vault path must be absolute: %s\n' "$VAULT_DIR_INPUT" >&2
+    exit 1
+  fi
+
+  if [[ ! -d "$VAULT_DIR_INPUT" ]]; then
+    printf 'Vault directory does not exist: %s\n' "$VAULT_DIR_INPUT" >&2
+    exit 1
+  fi
+}
+
 for cmd in cp chmod mkdir launchctl; do
   require_cmd "$cmd"
 done
@@ -49,12 +77,19 @@ if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
   exit 0
 fi
 
+prompt_for_vault_dir
+validate_vault_dir
+
 mkdir -p "$APP_DIR"
 mkdir -p "$LAUNCH_AGENTS_DIR"
 
 copy_file "$SCRIPT_DIR/content-review.sh" "$APP_DIR/content-review.sh"
 copy_file "$SCRIPT_DIR/add-feed.sh" "$APP_DIR/add-feed.sh"
 copy_file "$SCRIPT_DIR/content-feed.json" "$APP_DIR/content-feed.json"
+
+cat > "$APP_DIR/content-review.conf" <<EOF
+VAULT_DIR="$VAULT_DIR_INPUT"
+EOF
 
 chmod +x "$APP_DIR/content-review.sh"
 chmod +x "$APP_DIR/add-feed.sh"
@@ -103,6 +138,7 @@ if [[ -f "$LEGACY_LAUNCH_AGENT_PATH" ]]; then
 fi
 
 printf 'Installed to %s\n' "$APP_DIR"
+printf 'Vault path: %s\n' "$VAULT_DIR_INPUT"
 printf 'LaunchAgent loaded: %s\n' "$LAUNCH_AGENT_PATH"
 printf 'Run now: %s/content-review.sh\n' "$APP_DIR"
 printf 'Add feeds: %s/add-feed.sh\n' "$APP_DIR"
